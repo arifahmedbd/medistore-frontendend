@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { Roles } from "./constants/roles";
+import { userService } from "./services/session.servicec";
 
 const publicPaths = ["/", "/public", "/login"];
 const privatePaths = ["/private"];
@@ -7,9 +9,38 @@ const privatePaths = ["/private"];
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // ======================= VERIFY SESSION =======================
+  const { data } = await userService.getSession();
 
-  // ======================= CHECK PATHS & GIVE PERMISSIONS =======================
+  const isAuthenticated = !!data;
+  const role = data?.data?.role;
+
+  const isDashboardRoute =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin/dashboard") ||
+    pathname.startsWith("/seller/dashboard");
+
+  if (!isAuthenticated && isDashboardRoute) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (isAuthenticated && pathname === "/") {
+    if (role === Roles.admin) {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+    if (role === Roles.seller) {
+      return NextResponse.redirect(new URL("/seller/dashboard", request.url));
+    }
+  }
+
+  if (isAuthenticated) {
+    if (role === Roles.admin && pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+
+    if (role === Roles.seller && pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/seller/dashboard", request.url));
+    }
+  }
 
   const isPrivatePath = privatePaths.some(
     (path) => pathname === path || pathname.startsWith(path + "/"),
@@ -21,7 +52,6 @@ export async function proxy(request: NextRequest) {
       request.cookies.get("session_token");
 
     if (!token) {
-      console.log("No token found. Redirecting...");
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }

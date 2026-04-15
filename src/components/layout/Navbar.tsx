@@ -6,6 +6,7 @@ import { Menu, LogOut } from "lucide-react";
 
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "@/components/ui/button";
+import CartButton from "@/components/cart/CartButton";
 
 import {
   Sheet,
@@ -23,6 +24,7 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   const router = useRouter();
+
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -54,10 +56,12 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-md">
       <div className="container mx-auto flex items-center justify-between p-4">
+        {/* Logo */}
         <Link href="/" className="text-xl font-bold text-accent-foreground">
           MediStore
         </Link>
 
+        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-6">
           {menu.map((item) => (
             <Link key={item.title} href={item.url} className="hover:text-primary">
@@ -72,10 +76,12 @@ export default function Navbar({ user }: NavbarProps) {
           ))}
         </div>
 
+        {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-4">
           <ModeToggle />
 
-        
+          {/* ✅ Cart Button (Zustand powered) */}
+          {user?.role === "CUSTOMER" && <CartButton />}
 
           {!user && (
             <>
@@ -100,6 +106,7 @@ export default function Navbar({ user }: NavbarProps) {
           )}
         </div>
 
+        {/* Mobile Menu */}
         <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -138,7 +145,13 @@ export default function Navbar({ user }: NavbarProps) {
                   </Link>
                 ))}
 
-               
+                {/* ✅ Mobile Cart */}
+                {user?.role === "USER" && (
+                  <div className="flex items-center gap-2">
+                    <CartButton />
+                    <span className="font-semibold">Cart</span>
+                  </div>
+                )}
 
                 {!user && (
                   <>

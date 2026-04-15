@@ -31,7 +31,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   } catch (err) {
     console.error("Failed to load shop data:", err);
   }
-    console.log(medicines,categories, "mc")
 
   const buildHref = (p: number) => {
     const params = new URLSearchParams();
