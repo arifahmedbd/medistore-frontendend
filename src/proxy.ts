@@ -1,59 +1,61 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Roles } from "./constants/roles";
-import { userService } from "./services/session.servicec";
-
-const publicPaths = ["/", "/public", "/login"];
-const privatePaths = ["/private"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const { data } = await userService.getSession();
-
-  const isAuthenticated = !!data;
-  const role = data?.data?.role;
+  const token = request.cookies.get("session_token")?.value;
 
   const isDashboardRoute =
-    pathname.startsWith("/dashboard") ||
     pathname.startsWith("/admin/dashboard") ||
-    pathname.startsWith("/seller/dashboard");
+    pathname.startsWith("/seller/dashboard") ||
+    pathname.startsWith("/orders");
 
-  if (!isAuthenticated && isDashboardRoute) {
+  if (!token && isDashboardRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isAuthenticated && pathname === "/") {
-    if (role === Roles.admin) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-    if (role === Roles.seller) {
-      return NextResponse.redirect(new URL("/seller/dashboard", request.url));
+  if (!token && pathname === "/dashboard") {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (token && pathname === "/login") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  let session = null;
+  if (token) {
+    try {
+      const sessionRes = await fetch(
+        `${request.nextUrl.origin}/api/auth/get-session`,
+        {
+          headers: {
+            cookie: `session_token=${token}`,
+          },
+        },
+      );
+      session = sessionRes.ok ? await sessionRes.json() : null;
+    } catch {
+      session = null;
     }
   }
 
-  if (isAuthenticated) {
-    if (role === Roles.admin && pathname.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
+  const role = session?.user?.role;
 
-    if (role === Roles.seller && pathname.startsWith("/dashboard")) {
+  if (session && pathname === "/") {
+    if (role === Roles.admin)
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    if (role === Roles.seller)
       return NextResponse.redirect(new URL("/seller/dashboard", request.url));
-    }
   }
 
-  const isPrivatePath = privatePaths.some(
-    (path) => pathname === path || pathname.startsWith(path + "/"),
-  );
-
-  if (isPrivatePath) {
-    const token =
-      request.cookies.get("__Secure-session_token") ||
-      request.cookies.get("session_token");
-
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+  if (session && pathname.startsWith("/dashboard")) {
+    if (role === Roles.admin)
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    if (role === Roles.seller)
+      return NextResponse.redirect(new URL("/seller/dashboard", request.url));
+    return NextResponse.redirect(new URL("/orders", request.url));
   }
 
   return NextResponse.next();
@@ -62,9 +64,5 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-    "/",
-    "/dashboard/:path*",
-    "/admin-dashboard/:path*",
-    "/seller-dashboard/:path*",
   ],
 };

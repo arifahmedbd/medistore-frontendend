@@ -10,6 +10,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { getMedicineByIdAction } from "@/actions/medicine.action";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 interface MedicineDetailPageProps {
   params: Promise<{ id: string }>;
@@ -206,11 +207,11 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
             </div>
 
             {/* CTA */}
-            {/* <AddToCartButton
+            <AddToCartButton
               medicineId={medicine.id}
               medicineName={medicine.name}
               stock={medicine.stock}
-            /> */}
+            />
           </div>
         </div>
 

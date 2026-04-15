@@ -60,7 +60,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
       const res = await getCartAction();
       if (res.success) {
-        const items: CartItem[] = res.data.data.items ?? [];
+        const items: CartItem[] = res.data.items ?? [];
 
         set({
           items,

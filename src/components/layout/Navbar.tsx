@@ -146,7 +146,7 @@ export default function Navbar({ user }: NavbarProps) {
                 ))}
 
                 {/* ✅ Mobile Cart */}
-                {user?.role === "USER" && (
+                {user?.role === "CUSTOMER" && (
                   <div className="flex items-center gap-2">
                     <CartButton />
                     <span className="font-semibold">Cart</span>

@@ -1,4 +1,6 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Pill, Snowflake, Leaf, Smile } from "lucide-react"; 
 import { CategoryCard } from "./CategoryCard";
@@ -20,25 +22,34 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export const Categories = () => (
-  <section className="container mx-auto px-4 py-14">
-    <h2 className="text-2xl md:text-3xl font-semibold mb-10 text-foreground">
-      Shop by Category
-    </h2>
+export const Categories = () => {
+  const [isMounted, setIsMounted] = useState(false);
 
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {categories.map((cat) => (
-        <motion.div
-          key={cat.title}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-        >
-          <CategoryCard title={cat.title} icon={cat.icon} />
-        </motion.div>
-      ))}
-    </div>
-  </section>
-);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
+  if (!isMounted) return null; // Ensures it only renders after client-side hydration
+
+  return (
+    <section className="container mx-auto px-4 py-14">
+      <h2 className="text-2xl md:text-3xl font-semibold mb-10 text-foreground">
+        Shop by Category
+      </h2>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {categories.map((cat) => (
+          <motion.div
+            key={cat.title}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+          >
+            <CategoryCard title={cat.title} icon={cat.icon} />
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};

@@ -8,8 +8,7 @@ export default async function CommonLayout({
   children: React.ReactNode;
 }) {
   const sessionResult = await getSessionAction();
-  const user = sessionResult;
-    console.log("nav",user)
+  const user = sessionResult?.data?.data ?? null;
   
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">

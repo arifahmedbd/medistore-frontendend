@@ -12,7 +12,6 @@ async function getHeaders() {
 }
 
 export const adminService = {
-  // ── Dashboard ──
   getStats: async () => {
     try {
       const headers = await getHeaders();
@@ -30,11 +29,10 @@ export const adminService = {
     }
   },
 
-  // ── Users ──
   getUsers: async (params?: {
     page?: number;
     search?: string;
-    role?: "USER" | "SELLER" | "ADMIN";
+    role?: "CUSTOMER" | "SELLER" | "ADMIN";
     status?: "ACTIVE" | "BANNED";
   }) => {
     try {
@@ -60,7 +58,7 @@ export const adminService = {
     }
   },
 
-  updateUserRole: async (userId: string, role: "USER" | "SELLER") => {
+  updateUserRole: async (userId: string, role: "CUSTOMER" | "SELLER") => {
     try {
       const headers = await getHeaders();
       const res = await fetch(`${API_URL}/admin/users/${userId}/role`, {
@@ -102,7 +100,6 @@ export const adminService = {
     }
   },
 
-  // ── Orders ──
   getOrders: async (params?: {
     page?: number;
     search?: string;
@@ -130,7 +127,6 @@ export const adminService = {
     }
   },
 
-  // ── Categories ──
   getCategories: async () => {
     try {
       const headers = await getHeaders();

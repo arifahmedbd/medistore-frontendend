@@ -37,7 +37,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <CartDrawer />         
+          <CartDrawer />          
         <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>
