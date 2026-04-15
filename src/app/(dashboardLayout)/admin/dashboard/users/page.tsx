@@ -9,7 +9,7 @@ interface Props {
 export default async function AdminUsersPage({ searchParams }: Props) {
   const sp     = await searchParams;
   const search = sp?.search ?? "";
-  const role   = (sp?.role   as "USER"|"SELLER"|"ADMIN"|undefined) ?? undefined;
+  const role   = (sp?.role   as "CUSTOMER"|"SELLER"|"ADMIN"|undefined) ?? undefined;
   const status = (sp?.status as "ACTIVE"|"BANNED"|undefined) ?? undefined;
   const page   = parseInt(sp?.page ?? "1", 10) || 1;
 

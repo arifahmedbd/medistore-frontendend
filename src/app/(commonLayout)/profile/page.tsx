@@ -11,7 +11,6 @@ export default async function ProfilePage() {
 
   const res     = await getMyProfileAction();
   const profile = res?.data
-  console.log("pr", profile);
 
   return <ProfileClient profile={profile} />;
 }

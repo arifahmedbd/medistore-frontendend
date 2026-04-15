@@ -25,7 +25,7 @@ interface Props {
 }
 
 const ROLE_META: Record<string, { label: string; color: string }> = {
-  USER: { label: "USER", color: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400" },
+  USER: { label: "CUSTOMER", color: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400" },
   SELLER:   { label: "Seller",   color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
   ADMIN:    { label: "Admin",    color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
 };
@@ -34,7 +34,7 @@ function UserActionMenu({ user, onDone }: { user: User; onDone: () => void }) {
   const [open, setOpen]           = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const changeRole = (role: "USER" | "SELLER") => {
+  const changeRole = (role: "CUSTOMER" | "SELLER") => {
     setOpen(false);
     startTransition(async () => {
       const res = await updateUserRoleAction(user.id, role);
@@ -69,8 +69,8 @@ function UserActionMenu({ user, onDone }: { user: User; onDone: () => void }) {
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-8 z-20 w-44 bg-white dark:bg-[#0e1525] border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl py-1 overflow-hidden">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide px-3 py-1.5">Change Role</p>
-            {user.role !== "USER" && (
-              <button onClick={() => changeRole("USER")}
+            {user.role !== "CUSTOMER" && (
+              <button onClick={() => changeRole("CUSTOMER")}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
                 <UserCheck size={13} className="text-sky-500" /> Make USER
               </button>
@@ -148,7 +148,7 @@ export default function UsersClient({ users, totalPages, total, page, search, ro
 
         <div className="flex items-center gap-2 flex-wrap">
           <Filter size={13} className="text-slate-400" />
-          {["", "USER", "SELLER", "ADMIN"].map((r) => (
+          {["", "CUSTOMER", "SELLER", "ADMIN"].map((r) => (
             <Link key={r} href={buildHref({ role: r, page: 1 })}
               className={`text-xs font-semibold px-3 py-1.5 rounded-full transition ${
                 roleFilter === r

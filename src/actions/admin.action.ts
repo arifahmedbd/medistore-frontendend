@@ -8,7 +8,6 @@ type ActionResponse<T = any> = {
   message?: string;
 };
 
-// ── Helper to normalize responses ───────────────────────────
 function handleResponse(res: any): ActionResponse {
   if (res?.error) {
     return {
@@ -24,7 +23,6 @@ function handleResponse(res: any): ActionResponse {
   };
 }
 
-// ── Dashboard ──────────────────────────────────────────────
 export async function getAdminStatsAction(): Promise<ActionResponse> {
   try {
     const res = await adminService.getStats();
@@ -34,11 +32,10 @@ export async function getAdminStatsAction(): Promise<ActionResponse> {
   }
 }
 
-// ── Users ──────────────────────────────────────────────────
 export async function getAdminUsersAction(params?: {
   page?: number;
   search?: string;
-  role?: "USER" | "SELLER" | "ADMIN";
+  role?: "CUSTOMER" | "SELLER" | "ADMIN";
   status?: "ACTIVE" | "BANNED";
 }): Promise<ActionResponse> {
   try {
@@ -51,7 +48,7 @@ export async function getAdminUsersAction(params?: {
 
 export async function updateUserRoleAction(
   userId: string,
-  role: "USER" | "SELLER",
+  role: "CUSTOMER" | "SELLER",
 ): Promise<ActionResponse> {
   try {
     const res = await adminService.updateUserRole(userId, role);
