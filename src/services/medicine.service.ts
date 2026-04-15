@@ -71,7 +71,7 @@ export const medicineService = {
     try {
       const cookieStore = await cookies();
 
-      const url = new URL(`${API_URL}/medicines`);
+      const url = new URL(`${API_URL}/seller/medicines`);
 
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
@@ -97,7 +97,7 @@ export const medicineService = {
 
       const res = await fetch(url.toString(), config);
       const data = await res.json();
-
+      console.log(data, "service");
       if (!res.ok) {
         return { data: null, error: data };
       }
@@ -112,7 +112,7 @@ export const medicineService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/medicines/${id}`, {
+      const res = await fetch(`${API_URL}/seller/medicines/${id}`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -135,7 +135,7 @@ export const medicineService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/medicines`, {
+      const res = await fetch(`${API_URL}/seller/medicines`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,7 @@ export const medicineService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/medicines/${id}`, {
+      const res = await fetch(`${API_URL}/seller/medicines/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -187,7 +187,7 @@ export const medicineService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/medicines/${id}`, {
+      const res = await fetch(`${API_URL}/seller/medicines/${id}`, {
         method: "DELETE",
         headers: {
           Cookie: cookieStore.toString(),

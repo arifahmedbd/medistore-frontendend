@@ -23,7 +23,6 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   const router = useRouter();
-
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {

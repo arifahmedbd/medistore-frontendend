@@ -39,11 +39,13 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
 
   try {
     const res = await getMedicineByIdAction(id);
-    medicine = res?.data?.data ?? null;
+    medicine = res.data.data;
+    console.log(medicine)
+
   } catch (err) {
     console.error("Failed to fetch medicine:", err);
   }
-
+console.log(medicine)
   if (!medicine) return notFound();
 
   const inStock = medicine.stock > 0;

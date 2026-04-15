@@ -26,11 +26,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       getMedicinesAction({ categoryId, search: searchQuery, page, limit }),
     ]);
     categories = categoriesRes ?? [];
-    medicines = medicineRes?.data?.data ?? [];
+    medicines = medicineRes?.data.medicines?? [];
     totalPages = medicineRes?.data?.pagination?.totalPages ?? 1;
   } catch (err) {
     console.error("Failed to load shop data:", err);
   }
+    console.log(medicines,categories, "mc")
 
   const buildHref = (p: number) => {
     const params = new URLSearchParams();

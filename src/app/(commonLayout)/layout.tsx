@@ -9,7 +9,6 @@ export default async function CommonLayout({
 }) {
   const sessionResult = await getSessionAction();
   const user = sessionResult;
-console.log(user)
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       
