@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cancelOrderAction } from "@/actions/customer.action";
-import { useCartStore } from "@/cart/cart.store";
+import { useCartStore } from "@/providers/cart.context";
 
 
 // ── Status timeline config ─────────────────────────────────

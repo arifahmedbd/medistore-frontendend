@@ -1,5 +1,7 @@
-import { getMyOrderByIdAction, getSessionAction } from "@/actions/customer.action";
-import OrderDetailClient from "@/components/modules/user/OrderDetailClient";
+
+import { getMyOrderByIdAction } from "@/actions/customer.action";
+import { getSessionAction } from "@/actions/session.action";
+import OrderDetailClient from "@/components/customer/OrderDetailClient";
 import { redirect, notFound } from "next/navigation";
 
 

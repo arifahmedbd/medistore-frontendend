@@ -5,7 +5,8 @@ import {
   ShoppingBag, ArrowRight, Clock, Package,
   Truck, CheckCircle, XCircle, ShoppingCart,
 } from "lucide-react";
-import { getMyOrdersAction, getSessionAction } from "@/actions/customer.action";
+import { getMyOrdersAction } from "@/actions/customer.action";
+import { getSessionAction } from "@/actions/session.action";
 
 interface Props {
   searchParams?: Promise<{ page?: string }>;
@@ -27,8 +28,8 @@ export default async function OrdersPage({ searchParams }: Props) {
   const page = parseInt(sp?.page ?? "1", 10) || 1;
 
   const res        = await getMyOrdersAction({ page });
-  const orders     = res?.data?.data.orders     ?? [];
-  const totalPages = res?.data?.data.totalPages ?? 1;
+  const orders     = res?.data?.orders     ?? [];
+  const totalPages = res?.data?.totalPages ?? 1;
 
   return (
     <main className="min-h-screen bg-[#f7f8fa] dark:bg-[#0e1117]">

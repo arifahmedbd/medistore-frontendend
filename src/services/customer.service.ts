@@ -20,7 +20,7 @@ export const customerService = {
         .map((c) => `${c.name}=${c.value}`)
         .join("; ");
 
-      const res = await fetch(`${API_URL}/user/orders`, {
+      const res = await fetch(`${API_URL}/customer/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const customerService = {
       const q = new URLSearchParams();
       if (params?.page) q.set("page", String(params.page));
 
-      const res = await fetch(`${API_URL}/user/orders?${q}`, {
+      const res = await fetch(`${API_URL}/customer/orders?${q}`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -68,7 +68,7 @@ export const customerService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/user/orders/${orderId}`, {
+      const res = await fetch(`${API_URL}/customer/orders/${orderId}`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -89,7 +89,7 @@ export const customerService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/user/orders/${orderId}/cancel`, {
+      const res = await fetch(`${API_URL}/customer/orders/${orderId}/cancel`, {
         method: "PATCH",
         headers: {
           Cookie: cookieStore.toString(),
@@ -111,7 +111,7 @@ export const customerService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/user/profile`, {
+      const res = await fetch(`${API_URL}/customer/profile`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -132,7 +132,7 @@ export const customerService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/user/profile`, {
+      const res = await fetch(`${API_URL}/customer/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +159,7 @@ export const customerService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_URL}/user/profile/change-password`, {
+      const res = await fetch(`${API_URL}/customer/profile/change-password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
