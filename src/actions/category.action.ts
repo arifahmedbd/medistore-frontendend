@@ -20,12 +20,18 @@ export const getCategoriesAction = async (): Promise<Category[]> => {
 
 export const createCategoryAction = async (payload: { name: string }) => {
   try {
-    return await categoryService.createCategory(payload);
-  } catch (error) {
+    const response = await categoryService.createCategory(payload);
+
+    if (response.data) {
+      return { data: response.data, error: null };
+    }
+
     return {
       data: null,
-      error: { message: "Failed to create category" },
+      error: response.error ?? { message: "Failed to create category" },
     };
+  } catch (error) {
+    return { data: null, error: { message: "Failed to create category" } };
   }
 };
 
@@ -38,12 +44,18 @@ export const updateCategoryAction = async (
   }
 
   try {
-    return await categoryService.updateCategory(id, payload);
-  } catch (error) {
+    const response = await categoryService.updateCategory(id, payload);
+
+    if (response.data) {
+      return { data: response.data, error: null };
+    }
+
     return {
       data: null,
-      error: { message: "Failed to update category" },
+      error: response.error ?? { message: "Failed to update category" },
     };
+  } catch (error) {
+    return { data: null, error: { message: "Failed to update category" } };
   }
 };
 

@@ -30,20 +30,27 @@ function CategoryModal({
   const [isPending, startTransition] = useTransition();
   const backdropRef               = useRef<HTMLDivElement>(null);
 
-  const submit = () => {
-    if (!name.trim()) { toast.error("Category name is required"); return; }
-    startTransition(async () => {
-      const res = mode === "add"
-        ? await createCategoryAction(name.trim())
-        : await updateCategoryAction(category!.id, name.trim());
-      if (res?.success) {
-        toast.success(mode === "add" ? "Category created!" : "Category updated!");
-        onSuccess();
-      } else {
-        toast.error(res?.message ?? "Something went wrong");
-      }
-    });
-  };
+ const submit = () => {
+  if (!name.trim()) { 
+    toast.error("Category name is required"); 
+    return; 
+  }
+
+  const payload = { name: name.trim() }; 
+
+  startTransition(async () => {
+    const res = mode === "add"
+      ? await createCategoryAction(payload) 
+      : await updateCategoryAction(category!.id, payload);
+
+    if (res?.data) { 
+      toast.success(mode === "add" ? "Category created!" : "Category updated!");
+      onSuccess();
+    } else {
+      toast.error(res?.error?.message ?? "Something went wrong");
+    }
+  });
+};
 
   return (
     <div
@@ -97,8 +104,8 @@ function DeleteConfirm({ category, onClose, onSuccess }: {
 
   const confirm = () => startTransition(async () => {
     const res = await deleteCategoryAction(category.id);
-    if (res?.success) { toast.success("Category deleted"); onSuccess(); }
-    else toast.error(res?.message ?? "Failed to delete");
+    if (res?.data) { toast.success("Category deleted"); onSuccess(); }
+    else toast.error(res?.error?.message ?? "Failed to delete");
   });
 
   return (
