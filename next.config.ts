@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
+import "./src/env";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ["source.unsplash.com", "images.unsplash.com"],
+  },
   reactCompiler: true,
 
   // better-auth proxy
@@ -21,4 +24,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

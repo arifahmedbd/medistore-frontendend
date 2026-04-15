@@ -37,7 +37,7 @@ export default function Navbar({ user }: NavbarProps) {
 
   const roleMenu = [];
   if (user) {
-    if (user.role === "USER")
+    if (user.role === "CUSTOMER")
       roleMenu.push({ title: "Dashboard", url: "/orders" });
     if (user.role === "SELLER")
       roleMenu.push({ title: "Seller Dashboard", url: "/seller/dashboard" });
@@ -59,7 +59,6 @@ export default function Navbar({ user }: NavbarProps) {
           MediStore
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-6">
           {menu.map((item) => (
             <Link key={item.title} href={item.url} className="hover:text-primary">
