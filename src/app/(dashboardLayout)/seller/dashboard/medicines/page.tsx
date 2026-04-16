@@ -14,14 +14,15 @@ export default async function SellerMedicinesPage({ searchParams }: Props) {
   const page     = parseInt(resolved?.page ?? "1", 10) || 1;
   const openAdd  = resolved?.action === "new";
 
-  const [medRes, categories] = await Promise.all([
+  const [medRes, categoriesRes] = await Promise.all([
     getSellerMedicinesAction({ page, search }),
     getCategoriesAction(),
   ]);
   const medicines  = medRes?.data?.medicines ?? [];
+  const categories  = categoriesRes;
   const totalPages = medRes?.data?.totalPages ?? 1;
   const total      = medRes?.data?.total ?? 0;
-
+console.log(categories,"cat")
   return (
     <InventoryClient
       medicines={medicines}

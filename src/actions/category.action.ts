@@ -11,7 +11,8 @@ export interface Category {
 export const getCategoriesAction = async (): Promise<Category[]> => {
   try {
     const res = await categoryService.getCategories();
-    return Array.isArray(res.data?.data) ? res.data.data : [];
+    console.log(Array.isArray(res.data) ? res.data : [], "at");
+    return Array.isArray(res.data) ? res.data : [];
   } catch (err) {
     console.error(err);
     return [];

@@ -16,7 +16,7 @@ export const categoryService = {
       });
 
       const data = await res.json();
-
+      console.log(data);
       if (!res.ok) {
         return { data: null, error: data };
       }
@@ -31,62 +31,62 @@ export const categoryService = {
   },
 
   createCategory: async (payload: { name: string }) => {
-  try {
-    const cookieStore = await cookies();
+    try {
+      const cookieStore = await cookies();
 
-    const res = await fetch(`${API_URL}/admin/categories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
-      },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
+      const res = await fetch(`${API_URL}/admin/categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(payload),
+        cache: "no-store",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      return { data: null, error: data }; 
+      if (!res.ok) {
+        return { data: null, error: data };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: { message: "Failed to create category" },
+      };
     }
+  },
 
-    return { data, error: null };
-  } catch (error) {
-    return {
-      data: null,
-      error: { message: "Failed to create category" },
-    };
-  }
-},
+  updateCategory: async (id: string, payload: { name: string }) => {
+    try {
+      const cookieStore = await cookies();
 
-updateCategory: async (id: string, payload: { name: string }) => {
-  try {
-    const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/admin/categories/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(payload),
+        cache: "no-store",
+      });
 
-    const res = await fetch(`${API_URL}/admin/categories/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
-      },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
+      const data = await res.json();
 
-    const data = await res.json();
+      if (!res.ok) {
+        return { data: null, error: data };
+      }
 
-    if (!res.ok) {
-      return { data: null, error: data }; 
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: { message: "Failed to update category" },
+      };
     }
-
-    return { data, error: null };
-  } catch (error) {
-    return {
-      data: null,
-      error: { message: "Failed to update category" },
-    };
-  }
-},
+  },
 
   deleteCategory: async (id: string) => {
     try {
