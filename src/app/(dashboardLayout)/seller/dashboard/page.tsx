@@ -35,7 +35,6 @@ export default async function SellerDashboardPage() {
   const res = await getSellerStatsAction();
   const stats = res?.data;
   const recentOrders = stats?.recentOrders ?? [];
-
   return (
     <>
       <style>{`

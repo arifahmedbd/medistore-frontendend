@@ -246,14 +246,11 @@ export default function InventoryClient({ medicines, categories, totalPages, tot
           <p className="text-sm text-slate-400 mt-1">{total} medicine{total !== 1 ? "s" : ""} listed</p>
         </div>
         <button
-  onClick={() => setModal("add")}
-  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold
-             bg-slate-900 text-white 
-             dark:bg-green-500 dark:text-slate-900
-             hover:opacity-90 transition"
->
-  <Plus size={16} /> Add Medicine
-</button>
+          onClick={() => setModal("add")}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white dark:bg-green-500 dark:text-slate-900 hover:opacity-90 transition"
+        >
+          <Plus size={16} /> Add Medicine
+        </button>
       </div>
 
       {/* Search bar */}
@@ -267,14 +264,11 @@ export default function InventoryClient({ medicines, categories, totalPages, tot
           />
         </div>
         <button
-  type="submit"
-  className="px-4 py-2.5 rounded-xl text-sm font-medium
-             bg-slate-900 text-white
-             dark:bg-white dark:text-slate-900
-             hover:opacity-90 transition"
->
-  Search
-</button>
+          type="submit"
+          className="px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:opacity-90 transition"
+        >
+          Search
+        </button>
         {search && (
           <Link href="/seller/dashboard/medicines" className="px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
             Clear
