@@ -39,7 +39,7 @@ export default function Navbar({ user }: NavbarProps) {
   const roleMenu = [];
   if (user) {
     if (user.role === "CUSTOMER")
-      roleMenu.push({ title: "Dashboard", url: "/orders" });
+      roleMenu.push({ title: "Dashboard", url: "/orders" },{title: "Profile", url: "/profile" });
     if (user.role === "SELLER")
       roleMenu.push({ title: "Seller Dashboard", url: "/seller/dashboard" });
     if (user.role === "ADMIN")
