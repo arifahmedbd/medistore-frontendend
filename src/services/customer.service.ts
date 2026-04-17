@@ -152,33 +152,5 @@ export const customerService = {
     }
   },
 
-  changePassword: async (payload: {
-    currentPassword: string;
-    newPassword: string;
-  }) => {
-    try {
-      const cookieStore = await cookies();
-
-      const res = await fetch(`${API_URL}/customer/profile/change-password`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: cookieStore.toString(),
-        },
-        body: JSON.stringify(payload),
-        cache: "no-store",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) return { data: null, error: data };
-
-      return { data, error: null };
-    } catch {
-      return {
-        data: null,
-        error: { message: "Failed to change password" },
-      };
-    }
-  },
+  
 };

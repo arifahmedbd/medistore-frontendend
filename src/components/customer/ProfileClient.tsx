@@ -4,24 +4,45 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  User, ImageIcon, Lock, ShoppingBag, CheckCircle2,
-  Loader2, Eye, EyeOff, Mail, Calendar, BadgeCheck,
+  User,
+  ImageIcon,
+  ShoppingBag,
+  CheckCircle2,
+  Loader2,
+  Mail,
+  Calendar,
+  BadgeCheck,
 } from "lucide-react";
 import { toast } from "sonner";
-import { changePasswordAction, updateProfileAction } from "@/actions/customer.action";
+import { updateProfileAction } from "@/actions/customer.action";
 
 interface Profile {
-  id: string; name: string; email: string; image: string | null;
-  phone: string | null; role: string; createdAt: string; emailVerified: boolean;
+  id: string;
+  name: string;
+  email: string;
+  image: string | null;
+  phone: string | null;
+  role: string;
+  createdAt: string;
+  emailVerified: boolean;
 }
 
-interface Props { profile: Profile | null }
+interface Props {
+  profile: Profile | null;
+}
 
-// ── Input component ────────────────────────────────────────
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
+        {label}
+      </label>
       {children}
     </div>
   );
@@ -30,67 +51,31 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export default function ProfileClient({ profile }: Props) {
   const router = useRouter();
 
-  // Profile form
-  const [name,  setName]  = useState(profile?.name  ?? "");
+  const [name, setName] = useState(profile?.name ?? "");
   const [image, setImage] = useState(profile?.image ?? "");
   const [profilePending, startProfileTransition] = useTransition();
 
-  // Password form
-  const [pwForm, setPwForm] = useState({ current: "", next: "", confirm: "" });
-  const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
-  const [pwPending, startPwTransition] = useTransition();
-
   const handleProfileSave = () => {
-    if (!name.trim()) { toast.error("Name cannot be empty"); return; }
-    startProfileTransition(async () => {
-      const res = await updateProfileAction({ name: name.trim(), image: image.trim() || undefined });
-         if (res.error) {
-      toast.error(res.error?.message ?? "Failed to update");
+    if (!name.trim()) {
+      toast.error("Name cannot be empty");
       return;
     }
 
-    toast.success("Profile updated!");
-    router.refresh();
+    startProfileTransition(async () => {
+      const res = await updateProfileAction({
+        name: name.trim(),
+        image: image.trim() || undefined,
+      });
+
+      if (res.error) {
+        toast.error(res.error?.message ?? "Failed to update");
+        return;
+      }
+
+      toast.success("Profile updated!");
+      router.refresh();
     });
   };
-
-  const handlePasswordChange = () => {
-  if (!pwForm.current || !pwForm.next || !pwForm.confirm) {
-    toast.error("Please fill in all password fields");
-    return;
-  }
-
-  if (pwForm.next !== pwForm.confirm) {
-    toast.error("New passwords do not match");
-    return;
-  }
-
-  if (pwForm.next.length < 8) {
-    toast.error("Password must be at least 8 characters");
-    return;
-  }
-
-  startPwTransition(async () => {
-    const res = await changePasswordAction(
-      pwForm.current,
-      pwForm.next
-    );
-
-    if (res.error) {
-      toast.error(res.error?.message ?? "Failed to change password");
-      return;
-    }
-
-    toast.success("Password changed!");
-    setPwForm({ current: "", next: "", confirm: "" });
-  });
-};
-
-  const setPw = (k: keyof typeof pwForm) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => setPwForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const togglePw = (k: keyof typeof showPw) =>
-    () => setShowPw((s) => ({ ...s, [k]: !s[k] }));
 
   if (!profile) {
     return (
@@ -106,25 +91,38 @@ export default function ProfileClient({ profile }: Props) {
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          {/* Avatar */}
-          <div className="relative shrink-0">
-            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              {profile.image
-                ? <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
-                : <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {profile.name?.[0]?.toUpperCase() ?? "U"}
-                  </span>
-              }
-            </div>
+          <div className="w-16 h-16 rounded-2xl overflow-hidden bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            {profile.image ? (
+              <img
+                src={profile.image}
+                alt={profile.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {profile.name?.[0]?.toUpperCase() ?? "U"}
+              </span>
+            )}
           </div>
+
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              {profile.name}
+            </h1>
+
             <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                profile.role === "SELLER" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-                : profile.role === "ADMIN" ? "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400"
-                : "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400"
-              }`}>{profile.role}</span>
+              <span
+                className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                  profile.role === "SELLER"
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                    : profile.role === "ADMIN"
+                    ? "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400"
+                    : "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400"
+                }`}
+              >
+                {profile.role}
+              </span>
+
               {profile.emailVerified && (
                 <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
                   <BadgeCheck size={12} /> Verified
@@ -133,10 +131,11 @@ export default function ProfileClient({ profile }: Props) {
             </div>
           </div>
 
-          {/* Quick links */}
           <div className="ml-auto">
-            <Link href="/orders"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
+            <Link
+              href="/orders"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
+            >
               <ShoppingBag size={14} /> My Orders
             </Link>
           </div>
@@ -144,114 +143,88 @@ export default function ProfileClient({ profile }: Props) {
 
         <div className="space-y-4">
 
-          {/* ── Account Info (read-only) ── */}
+          {/* Account Info */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
             <h2 className="font-semibold text-gray-800 dark:text-white mb-4 text-sm flex items-center gap-2">
               <Mail size={14} className="text-blue-500" /> Account Info
             </h2>
+
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-400 mb-1">Email</p>
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{profile.email}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                  {profile.email}
+                </p>
               </div>
+
               <div>
                 <p className="text-xs text-gray-400 mb-1">Member Since</p>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center gap-1.5">
                   <Calendar size={12} className="text-gray-400" />
-                  {new Date(profile.createdAt).toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
+                  {new Date(profile.createdAt).toLocaleDateString("en-GB", {
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* ── Edit Profile ── */}
+          {/* Edit Profile */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
             <h2 className="font-semibold text-gray-800 dark:text-white mb-4 text-sm flex items-center gap-2">
               <User size={14} className="text-blue-500" /> Edit Profile
             </h2>
+
             <div className="space-y-4">
               <Field label="Full Name">
-                <input value={name} onChange={(e) => setName(e.target.value)}
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Your full name"
-                  className="w-full border border-gray-200 dark:border-gray-600 rounded-xl px-3.5 py-2.5 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  className="w-full border border-gray-200 dark:border-gray-600 rounded-xl px-3.5 py-2.5 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </Field>
+
               <Field label="Profile Photo URL">
                 <div className="flex gap-3 items-start">
                   <div className="relative flex-1">
-                    <ImageIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    <input value={image} onChange={(e) => setImage(e.target.value)}
+                    <ImageIcon
+                      size={14}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                    />
+                    <input
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
                       placeholder="https://..."
-                      className="w-full pl-9 pr-3.5 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full pl-9 pr-3.5 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
+
                   {image && (
-                    <img src={image} alt="Preview" onError={() => setImage("")}
-                      className="w-10 h-10 rounded-xl object-cover shrink-0 border border-gray-200 dark:border-gray-600" />
+                    <img
+                      src={image}
+                      alt="Preview"
+                      onError={() => setImage("")}
+                      className="w-10 h-10 rounded-xl object-cover shrink-0 border border-gray-200 dark:border-gray-600"
+                    />
                   )}
                 </div>
               </Field>
             </div>
+
             <div className="flex justify-end mt-4">
-              <button onClick={handleProfileSave} disabled={profilePending}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50">
-                {profilePending ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+              <button
+                onClick={handleProfileSave}
+                disabled={profilePending}
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50"
+              >
+                {profilePending ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <CheckCircle2 size={14} />
+                )}
                 Save Changes
-              </button>
-            </div>
-          </div>
-
-          {/* ── Change Password ── */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
-            <h2 className="font-semibold text-gray-800 dark:text-white mb-4 text-sm flex items-center gap-2">
-              <Lock size={14} className="text-blue-500" /> Change Password
-            </h2>
-            <div className="space-y-4">
-              {(["current", "next", "confirm"] as const).map((key) => (
-                <Field
-                  key={key}
-                  label={key === "current" ? "Current Password" : key === "next" ? "New Password" : "Confirm New Password"}
-                >
-                  <div className="relative">
-                    <input
-                      type={showPw[key] ? "text" : "password"}
-                      value={pwForm[key]}
-                      onChange={setPw(key)}
-                      placeholder={key === "current" ? "Enter current password" : key === "next" ? "Min. 8 characters" : "Repeat new password"}
-                      className="w-full border border-gray-200 dark:border-gray-600 rounded-xl px-3.5 py-2.5 pr-10 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button type="button" onClick={togglePw(key)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-                      {showPw[key] ? <EyeOff size={15} /> : <Eye size={15} />}
-                    </button>
-                  </div>
-                </Field>
-              ))}
-            </div>
-
-            {/* Password strength */}
-            {pwForm.next.length > 0 && (
-              <div className="mt-2">
-                <div className="h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full transition-all ${
-                    pwForm.next.length >= 12 ? "w-full bg-green-500"
-                    : pwForm.next.length >= 8  ? "w-2/3 bg-amber-400"
-                    : "w-1/3 bg-red-400"
-                  }`} />
-                </div>
-                <p className={`text-[11px] mt-1 ${
-                  pwForm.next.length >= 12 ? "text-green-500"
-                  : pwForm.next.length >= 8  ? "text-amber-500"
-                  : "text-red-400"
-                }`}>
-                  {pwForm.next.length >= 12 ? "Strong password" : pwForm.next.length >= 8 ? "Acceptable" : "Too short"}
-                </p>
-              </div>
-            )}
-
-            <div className="flex justify-end mt-4">
-              <button onClick={handlePasswordChange} disabled={pwPending}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50">
-                {pwPending ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-                Update Password
               </button>
             </div>
           </div>

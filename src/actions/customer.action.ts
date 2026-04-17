@@ -2,9 +2,6 @@
 
 import { customerService } from "@/services/customer.service";
 
-
-
-
 export const placeOrderAction = async (payload: {
   fullName: string;
   phone: string;
@@ -85,23 +82,6 @@ export const updateProfileAction = async (payload: {
     return {
       data: null,
       error: { message: "Failed to update profile" },
-    };
-  }
-};
-
-export const changePasswordAction = async (
-  currentPassword: string,
-  newPassword: string,
-) => {
-  try {
-    return await customerService.changePassword({
-      currentPassword,
-      newPassword,
-    });
-  } catch {
-    return {
-      data: null,
-      error: { message: "Failed to change password" },
     };
   }
 };
