@@ -36,7 +36,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
     if (s)  q.set("search", s);
     if (st) q.set("status", st);
     if (p > 1) q.set("page", String(p));
-    return `/admin/orders?${q.toString()}`;
+    return `/admin/dashboard/orders?${q.toString()}`;
   };
 
   return (

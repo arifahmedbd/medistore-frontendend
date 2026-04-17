@@ -11,7 +11,6 @@ export interface Category {
 export const getCategoriesAction = async (): Promise<Category[]> => {
   try {
     const res = await categoryService.getCategories();
-    console.log(Array.isArray(res.data) ? res.data : [], "at");
     return Array.isArray(res.data) ? res.data : [];
   } catch (err) {
     console.error(err);
@@ -46,7 +45,6 @@ export const updateCategoryAction = async (
 
   try {
     const response = await categoryService.updateCategory(id, payload);
-
     if (response.data) {
       return { data: response.data, error: null };
     }

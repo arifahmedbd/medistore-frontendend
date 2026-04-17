@@ -115,7 +115,7 @@ export default function UsersClient({ users, totalPages, total, page, search, ro
     if (r)  q.set("role", r);
     if (st) q.set("status", st);
     if (p > 1) q.set("page", String(p));
-    return `/admin/users?${q.toString()}`;
+    return `/admin/dashboard/users?${q.toString()}`;
   };
 
   const handleSearch = (e: React.FormEvent) => {

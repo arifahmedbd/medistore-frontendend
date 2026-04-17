@@ -15,7 +15,7 @@ export default async function OrderDetailPage({ params }: Props) {
   if (!session) redirect("/login");
 
   const res   = await getMyOrderByIdAction(id);
-  const order = res?.data?.data;
+  const order = res?.data;
   if (!order) return notFound();
 
   return <OrderDetailClient order={order} />;

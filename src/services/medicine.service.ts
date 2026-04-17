@@ -97,6 +97,7 @@ export const medicineService = {
 
       const res = await fetch(url.toString(), config);
       const data = await res.json();
+
       if (!res.ok) {
         return { data: null, error: data };
       }

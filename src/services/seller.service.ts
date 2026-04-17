@@ -21,6 +21,7 @@ export const sellerService = {
       });
 
       const data = await res.json();
+
       if (!res.ok) return { data: null, error: data };
       return { data, error: null };
     } catch (error) {

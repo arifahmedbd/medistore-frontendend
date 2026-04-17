@@ -22,7 +22,6 @@ export default async function SellerMedicinesPage({ searchParams }: Props) {
   const categories  = categoriesRes;
   const totalPages = medRes?.data?.totalPages ?? 1;
   const total      = medRes?.data?.total ?? 0;
-console.log(categories,"cat")
   return (
     <InventoryClient
       medicines={medicines}

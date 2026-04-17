@@ -16,7 +16,6 @@ export const categoryService = {
       });
 
       const data = await res.json();
-      console.log(data);
       if (!res.ok) {
         return { data: null, error: data };
       }
@@ -64,7 +63,7 @@ export const categoryService = {
       const cookieStore = await cookies();
 
       const res = await fetch(`${API_URL}/admin/categories/${id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
@@ -74,7 +73,6 @@ export const categoryService = {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         return { data: null, error: data };
       }

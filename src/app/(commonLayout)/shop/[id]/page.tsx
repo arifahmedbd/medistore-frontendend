@@ -40,7 +40,9 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
 
   try {
     const res = await getMedicineByIdAction(id);
-    medicine = res.data.data;
+    medicine = res.data;
+          console.log(medicine, "affa");
+
 
   } catch (err) {
     console.error("Failed to fetch medicine:", err);
