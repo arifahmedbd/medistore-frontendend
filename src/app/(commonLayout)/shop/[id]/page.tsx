@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { getMedicineByIdAction } from "@/actions/medicine.action";
 import AddToCartButton from "@/components/cart/AddToCartButton";
+import ReviewSection from "@/components/modules/review/ReviewSection";
+import { getReviewsByMedicineAction } from "@/actions/review.action";
 
 interface MedicineDetailPageProps {
   params: Promise<{ id: string }>;
@@ -35,13 +37,15 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
       email: string;
       image: string | null;
     };
-    reviews: { id: string; rating: number; comment?: string; user?: { name: string } }[];
   } | null = null;
+  let reviews: any[] = [];
 
   try {
-    const res = await getMedicineByIdAction(id);
-    medicine = res.data;
-          console.log(medicine, "affa");
+   const medicineRes = await getMedicineByIdAction(id);
+    medicine = medicineRes.data;
+
+    const reviewRes = await getReviewsByMedicineAction(id);
+    reviews = reviewRes.data ?? [];
 
 
   } catch (err) {
@@ -51,9 +55,9 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
 
   const inStock = medicine.stock > 0;
   const lowStock = medicine.stock > 0 && medicine.stock <= 10;
-  const avgRating =
-    (medicine.reviews?.length ?? 0) > 0
-      ? medicine.reviews!.reduce((sum, r) => sum + r.rating, 0) / medicine.reviews!.length
+ const avgRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
       : null;
 
   const addedDate = new Date(medicine.createdAt).toLocaleDateString("en-GB", {
@@ -128,8 +132,8 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
                     />
                   ))}
                   <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">
-                    {avgRating.toFixed(1)} ({medicine.reviews.length} review
-                    {medicine.reviews.length !== 1 ? "s" : ""})
+                    {avgRating.toFixed(1)} ({reviews.length} review
+                    {reviews.length !== 1 ? "s" : ""})
                   </span>
                 </div>
               ) : (
@@ -219,57 +223,10 @@ export default async function MedicineDetailPage({ params }: MedicineDetailPageP
 
         {/* ── Reviews Section ── */}
         <section className="mt-14">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-5">
-            Customer Reviews
-            {medicine?.reviews?.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-gray-400 dark:text-gray-500">
-                ({medicine?.reviews?.length})
-              </span>
-            )}
-          </h2>
-
-          {medicine?.reviews?.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-10 text-center">
-              <Star size={32} className="mx-auto text-gray-200 dark:text-gray-700 mb-3" />
-              <p className="text-gray-500 dark:text-gray-400 font-medium">No reviews yet</p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                Be the first to review this product.
-              </p>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 gap-4">
-              {medicine?.reviews?.map((review) => (
-                <div
-                  key={review.id}
-                  className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="font-semibold text-gray-800 dark:text-white text-sm">
-                      {review?.user?.name ?? "Anonymous"}
-                    </p>
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={13}
-                          className={
-                            i < review.rating
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-gray-200 dark:text-gray-600"
-                          }
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  {review?.comment && (
-                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {review.comment}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+         <ReviewSection
+  medicineId={medicine.id}
+  initialReviews={reviews ?? []}
+/>
         </section>
       </div>
     </main>
