@@ -29,12 +29,11 @@ const formSchema = z.object({
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
   const handleGoogleLogin = async () => {
-    const data = authClient.signIn.social({
-      provider: "google",
-      callbackURL: "http://localhost:3000",
-    });
-
-  };
+  await authClient.signIn.social({
+    provider: "google",
+    callbackURL: "/",
+  });
+};
 
   const form = useForm({
     defaultValues: {

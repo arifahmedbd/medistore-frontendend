@@ -83,7 +83,7 @@ export default function OrderDetailClient({ order }: { order: any }) {
     openDrawer();
     toast.success("Items added to cart!");
   };
-
+console.log(order,"aa")
   const subtotal  = order.items.reduce((s: number, i: any) => s + i.price * i.quantity, 0);
   const delivery  = 0;
 

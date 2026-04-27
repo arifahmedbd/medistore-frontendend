@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Roles } from "./constants/roles";
+import { userService } from "./services/session.servicec";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -25,24 +26,25 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  let session = null;
-  if (token) {
-    try {
-      const sessionRes = await fetch(
-        `${request.nextUrl.origin}/api/auth/get-session`,
-        {
-          headers: {
-            cookie: `session_token=${token}`,
-          },
-        },
-      );
-      session = sessionRes.ok ? await sessionRes.json() : null;
-    } catch {
-      session = null;
-    }
-  }
+  // let session = null;
+  // if (token) {
+  //   try {
+  //     const sessionRes = await fetch(
+  //       `${request.nextUrl.origin}/api/v1/auth/me`,
+  //       {
+  //         headers: {
+  //           cookie: `session_token=${token}`,
+  //         },
+  //       },
+  //     );
+  //     session = sessionRes.ok ? await sessionRes.json() : null;
+  //   } catch {
+  //     session = null;
+  //   }
+  // }
+  const session = await userService.getSession();
 
-  const role = session?.user?.role;
+  const role = session?.data?.data?.role;
 
   if (session && pathname === "/") {
     if (role === Roles.admin)
