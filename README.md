@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+                                                           # 💊 MediStore Frontend
 
-## Getting Started
+Frontend for **MediStore** – an online OTC medicine shop.
 
-First, run the development server:
+Built with **Next.js (App Router), TypeScript, and Tailwind CSS** with a modern, responsive UI.
 
-```bash
+---
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Zustand (State Management)
+- Better Auth Client
+
+---
+
+## Features
+
+### Public
+
+- Homepage (Hero, Categories, Featured, Trust)
+- Shop page
+- Medicine details page
+- Search & pagination
+
+### Customer
+
+- Register / Login
+- Email verification
+- Add to cart
+- Checkout (COD)
+- View orders
+- Profile management
+
+### Seller
+
+- Dashboard
+- Manage medicines
+- View and update orders
+
+### Admin
+
+- Dashboard
+- Manage users
+- Manage categories
+- View all orders
+
+---
+
+## Routes
+
+### Public
+
+/  
+/shop  
+/shop/:id  
+/login  
+/register  
+/contact
+
+### Customer
+
+/cart  
+/checkout  
+/orders  
+/orders/:id  
+/profile
+
+### Seller
+
+/seller/dashboard  
+/seller/medicines  
+/seller/orders
+
+### Admin
+
+/admin  
+/admin/users  
+/admin/orders  
+/admin/categories
+
+---
+
+## Cart System
+
+- Zustand for global state
+- Synced with backend
+- Persistent across sessions
+
+---
+
+## Payments
+
+Supports:
+
+- Cash on Delivery
+
+---
+
+## UI/UX
+
+- Fully responsive design
+- Dark mode support
+- Clean card-based layout
+- Modern e-commerce style
+
+---
+
+## ⚙️ Environment Variables
+
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
+BACKEND_URL=http://localhost:5000
+FRONTEND_URL=http://localhost:3000
+API_URL=http://localhost:5000/api/v1
+AUTH_URL=http://localhost:5000/api/v1/auth
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Notes
+Uses Better Auth for authentication
+Session-based login
+Protected routes handled via middleware
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Author
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MediStore Frontend – Built with modern Next.js architecture
